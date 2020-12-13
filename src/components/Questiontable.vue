@@ -45,10 +45,10 @@ export default {
   },
   created() {
     this.$axios
-      .get("http://127.0.0.1:8000/getpapers")
+      .get("https://questionbankioe.herokuapp.com/getpapers")
       .then(response => (this.papers=response.data.paper_list));
     this.$axios
-    .get("http://127.0.0.1:8000/getcourses")
+    .get("https://questionbankioe.herokuapp.com/getcourses")
     .then(response=>(this.courses=response.data.course_list));
   },
   methods:{
