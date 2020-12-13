@@ -3,19 +3,23 @@
     <v-card-title>
       IOE Old Question Database For Electronics and Communication Engineering
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
+  <v-select
+      v-model="search"
+      :items="courses"
+      label="Search By Course Title"
+    ></v-select>
     </v-card-title>
     <v-data-table
       :headers="headers"
       :items="papers"
       :search="search"
-    ></v-data-table>
+    >
+        <template #item.link="{ value }">
+            <a target="_blank" :href="value">
+              {{ value }}
+            </a>
+        </template>
+    </v-data-table>
   </v-card>
 </template>
 
@@ -24,12 +28,15 @@ export default {
   data() {
     return {
       search: "",
+      courses:[],
       headers: [
-        {
-          text: "Exam Year",
-          align: "start",
-          value: "year"
-        },
+        {text: "Course Code", value: "course_code"},
+        {text: "Course Title", value: "course_title"},
+        {text: "Semester", value: "semester"},
+        {text: "Department", value: "department"},
+        {text: "Program", value: "program"},
+        {text: "Course Type", value: "course_type"},
+        {text: "Exam Year", value: "year"},
         { text: "Exam Type", value: "type" },
         { text: "Paper Link", value: "link", sortable: false }
       ],
@@ -37,9 +44,16 @@ export default {
     };
   },
   created() {
-    axios
+    this.$axios
       .get("http://127.0.0.1:8000/getpapers")
-      .then(response => (this.papers = response.data));
+      .then(response => (this.papers=response.data.paper_list));
+    this.$axios
+    .get("http://127.0.0.1:8000/getcourses")
+    .then(response=>(this.courses=response.data.course_list));
+  },
+  methods:{
+
   }
+
 };
 </script>
